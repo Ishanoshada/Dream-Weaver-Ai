@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dream Weaver AI</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Universe Theme Scrollbar */
+    ::-webkit-scrollbar {
+      width: 10px;
+      height: 10px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #1e1b4b; /* Deep indigo */
+    }
+    html.dark ::-webkit-scrollbar-track {
+      background: #0f172a; /* Darker slate */
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #4f46e5; /* Indigo-500 */
+      border-radius: 5px;
+      border: 2px solid #1e1b4b; /* Track color for inset effect */
+    }
+    html.dark ::-webkit-scrollbar-thumb {
+      background: #6366f1; /* Indigo-500 dark */
+      border: 2px solid #0f172a;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #a855f7; /* Purple-500 */
+    }
+
+    html {
+      height: 100%;
+      overflow-y: hidden; /* Prevent html from having its own scrollbar */
+    }
+
+    body {
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      height: 100%; /* Make body fill the html element */
+      color: #0f172a; /* Default dark text for light mode */
+      background-color: #0f172a; /* Base for starry background */
+      /* overflow-x: hidden; removed, #root will handle */
+      /* position: relative; removed to ensure fixed backgrounds are viewport-fixed */
+    }
+    html.dark body {
+      color: #e2e8f0; /* Default light text for dark mode */
+    }
+
+    /* Starry Background */
+    .stars {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -2; /* Behind body content but above solid background */
+      background: transparent;
+    }
+    .stars::after {
+      content: "";
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-image: radial-gradient(1px 1px at 20px 30px, #eee, rgba(0,0,0,0)),
+                        radial-gradient(1px 1px at 40px 70px, #fff, rgba(0,0,0,0)),
+                        radial-gradient(1px 1px at 50px 160px, #ddd, rgba(0,0,0,0)),
+                        radial-gradient(2px 2px at 90px 40px, #fff, rgba(0,0,0,0)),
+                        radial-gradient(2px 2px at 130px 80px, #fff, rgba(0,0,0,0)),
+                        radial-gradient(2px 2px at 160px 120px, #ddd, rgba(0,0,0,0));
+      background-size: 200px 200px;
+      animation: twinkle-stars-1 120s linear infinite;
+    }
+    .stars.stars2::after {
+      background-image: radial-gradient(1px 1px at 50px 20px, #eee, rgba(0,0,0,0)),
+                        radial-gradient(1px 1px at 10px 90px, #fff, rgba(0,0,0,0)),
+                        radial-gradient(1px 1px at 130px 10px, #ddd, rgba(0,0,0,0)),
+                        radial-gradient(2px 2px at 100px 50px, #fff, rgba(0,0,0,0)),
+                        radial-gradient(2px 2px at 40px 120px, #fff, rgba(0,0,0,0)),
+                        radial-gradient(2px 2px at 150px 180px, #ddd, rgba(0,0,0,0));
+      background-size: 250px 250px;
+      animation: twinkle-stars-2 150s linear infinite alternate;
+    }
+    .stars.stars3::after {
+      background-image: radial-gradient(1px 1px at 5px 55px, #eee, rgba(0,0,0,0)),
+                        radial-gradient(1px 1px at 80px 35px, #fff, rgba(0,0,0,0)),
+                        radial-gradient(1px 1px at 100px 5px, #ddd, rgba(0,0,0,0)),
+                        radial-gradient(1.5px 1.5px at 120px 80px, #fff, rgba(0,0,0,0)),
+                        radial-gradient(1.5px 1.5px at 30px 130px, #fff, rgba(0,0,0,0)),
+                        radial-gradient(1.5px 1.5px at 140px 140px, #ddd, rgba(0,0,0,0));
+      background-size: 150px 150px;
+      animation: twinkle-stars-3 180s linear infinite;
+    }
+
+    @keyframes twinkle-stars-1 { from { background-position: 0 0; } to { background-position: -10000px 5000px; } }
+    @keyframes twinkle-stars-2 { from { background-position: 0 0; } to { background-position: -10000px 5000px; } }
+    @keyframes twinkle-stars-3 { from { background-position: 0 0; } to { background-position: -10000px 5000px; } }
+    
+    /* Cosmic Background Panning */
+    .bg-pan-universe {
+      background: linear-gradient(230deg, #0f172a, #1e1b4b, #312e81, #4f46e5, #7c3aed, #a855f7, #db2777);
+      background-size: 400% 400%;
+      animation: bg-pan-universe-animation 30s ease infinite;
+      position: fixed; /* Ensure it covers the whole viewport */
+      top: 0; left: 0; width: 100%; height: 100%;
+      z-index: -3; /* Furthest back */
+    }
+    @keyframes bg-pan-universe-animation {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Content Appear Animation */
+    @keyframes content-appear-animation {
+      0% { opacity: 0; transform: translateY(20px) scale(0.98); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .animate-content-appear {
+      animation: content-appear-animation 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    }
+    
+    /* Icon Float Animation */
+    @keyframes float-icon-animation {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+    .animate-float-icon {
+      animation: float-icon-animation 3s ease-in-out infinite;
+    }
+
+    /* Button Pulse Glow Animation */
+    @keyframes pulse-glow-button-animation {
+      0% { box-shadow: 0 0 5px rgba(168, 85, 247, 0.5), 0 0 10px rgba(168, 85, 247, 0.3); } /* A855F7 Purple-500 */
+      50% { box-shadow: 0 0 15px rgba(168, 85, 247, 0.8), 0 0 25px rgba(168, 85, 247, 0.5); }
+      100% { box-shadow: 0 0 5px rgba(168, 85, 247, 0.5), 0 0 10px rgba(168, 85, 247, 0.3); }
+    }
+    .button-pulse-glow:not(:disabled) {
+      animation: pulse-glow-button-animation 2.5s infinite ease-in-out;
+    }
+
+    /* For main app layout to sit above fixed backgrounds and manage its own scroll */
+    #root {
+      flex: 1; /* Grow to fill body */
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      position: relative; /* For z-index stacking against fixed backgrounds */
+      z-index: 1;
+      overflow-y: auto; /* Makes #root the scrollable container */
+      overflow-x: hidden; /* Prevent horizontal scroll on app content */
+    }
+    
+  </style>
+<script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@^19.1.0",
+    "react-dom/": "https://esm.sh/react-dom@^19.1.0/",
+    "react/": "https://esm.sh/react@^19.1.0/",
+    "@google/genai": "https://esm.sh/@google/genai@^1.1.0"
+  }
+}
+</script>
+</head>
+<body class="antialiased">
+  <div class="bg-pan-universe"></div>
+  <div class="stars"></div>
+  <div class="stars stars2"></div>
+  <div class="stars stars3"></div>
+  <div id="root"></div>
+  <script type="module" src="/index.tsx"></script>
+</body>
+</html><link rel="stylesheet" href="index.css">
+<script src="index.tsx" type="module"></script>
