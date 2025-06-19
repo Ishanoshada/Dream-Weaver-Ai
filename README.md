@@ -2,6 +2,7 @@
 
 Unravel the mysteries of your subconscious with Dream Weaver AI! This application uses the power of Google's Gemini API to provide insightful interpretations of your dreams from both Western scientific and Vedic perspectives. It also offers tailored lucid dreaming techniques, can generate binaural beats to complement your dream exploration, and even visualize your dream with an AI-generated image.
 
+
 ![img](/imgs/1.png)
 
 ## Features
