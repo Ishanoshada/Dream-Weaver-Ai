@@ -142,3 +142,5 @@ Contributions are welcome! If you have suggestions or improvements, feel free to
 ---
 
 Crafted by [Ishanoshada](https://github.com/Ishanoshada/).
+
+**Repository Views** ![Views](https://profile-counter.glitch.me/dream-waver/count.svg)
